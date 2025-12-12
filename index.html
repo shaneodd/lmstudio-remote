@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LMStudio Chat</title>
+<link rel="stylesheet" href="style.css">
+<script defer src="app.js"></script>
+
+<!-- PWA manifest (optional) -->
+<link rel="manifest" href="manifest.json">
+</head>
+<body class="theme-light">
+
+<header>
+  <h1>🤖 LMStudio Chat</h1>
+  <!-- Model selector (populated from server) -->
+  <select id="modelSelect" style="margin-right:0.5rem;"></select>
+  <button id="settingsBtn">⚙️ Settings</button>
+</header>
+
+<main id="chatContainer"></main>
+
+<footer>
+  <div id="contextPanel" class="context-panel" style="margin-bottom:0.4rem;display:flex;flex-wrap:wrap;"></div>
+
+  <input type="file"
+         id="attachBtn"
+         multiple
+         accept=".txt,.md,image/*"
+         style="margin-right:.5rem;" />
+
+  <textarea id="promptInput" rows="2"
+            placeholder="Ask something…"></textarea>
+  <button id="sendBtn">Send</button>
+</footer>
+
+<!-- Settings modal (hidden by default) -->
+<div id="settingsModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Connection settings</h2>
+
+    <p>In LM-Studio you may need to enable CORs in server settings for this to operate properly.</p>
+    <label>
+      LMStudio URL:
+      <input type="url" id="apiUrlInput"
+             placeholder="http://192.168.1.27:1234"
+             required />
+    </label>
+
+
+
+    <div class="modal-actions">
+      <button id="saveSettingsBtn">Save</button>
+      <button id="closeSettingsBtn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
