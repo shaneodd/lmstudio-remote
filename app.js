@@ -114,9 +114,19 @@ modelSelect.addEventListener('change', () => {
 const settingsBtn     = document.getElementById('settingsBtn');
 const settingsModal   = document.getElementById('settingsModal');
 const apiUrlInput     = document.getElementById('apiUrlInput');
-// const modelNameInput  = document.getElementById('modelNameInput'); // removed – use modelSelect instead
+// const modelNameInput  = document.getElementById('modelNameInput'); // removed – use selector
 const saveSettingsBtn = document.getElementById('saveSettingsBtn');
 const closeSettingsBtn= document.getElementById('closeSettingsBtn');
+// New UI elements for mobile navigation
+const menuBtn         = document.getElementById('menuBtn');
+const navActions      = document.getElementById('navActions');
+// Toggle navigation visibility on hamburger click
+if (menuBtn) {
+    menuBtn.addEventListener('click', () => {
+        const hdr = document.querySelector('header');
+        if (hdr) hdr.classList.toggle('open');
+    });
+}
 
 // ---------- Context handling (text + images) ----------------------------
 let pendingContext = []; // [{type:'text'|'image', content:string, name:string}]
@@ -424,7 +434,11 @@ attachBtn.addEventListener('change', async e => {
         }
     };
     // Insert after the settings icon
-    document.querySelector('header').append(exportBtn, clearBtn, themeToggle);
+    if (navActions) {
+    navActions.appendChild(exportBtn);
+    navActions.appendChild(clearBtn);
+    navActions.appendChild(themeToggle);
+}
 
     // ---------- Init -------------------------------------------------------
     (async () => {
