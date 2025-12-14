@@ -432,6 +432,9 @@ attachBtn.addEventListener('change', async e => {
             root.classList.add('theme-light');
             themeToggle.textContent = "🌙 Dark";
         }
+        // Persist the selected theme in localStorage
+        const currentTheme = root.classList.contains('theme-dark') ? 'theme-dark' : 'theme-light';
+        localStorage.setItem('theme', currentTheme);
     };
     // Insert after the settings icon
     if (navActions) {
@@ -453,6 +456,18 @@ attachBtn.addEventListener('change', async e => {
 
         // Auto‑apply saved theme (optional)
         const savedTheme = localStorage.getItem("theme");
-        if (savedTheme) document.body.className = savedTheme;
+        if (savedTheme) {
+            document.body.className = savedTheme;
+            // Update theme toggle button text to reflect current mode
+            if (savedTheme === 'theme-dark') {
+                themeToggle.textContent = "☀️ Light"; // currently dark, so offer light switch
+            } else {
+                themeToggle.textContent = "🌙 Dark"; // currently light, offer dark switch
+            }
+        } else {
+            // No saved theme: default to light mode and set button accordingly
+            document.body.classList.add('theme-light');
+            themeToggle.textContent = "🌙 Dark";
+        }
     })();
 })();

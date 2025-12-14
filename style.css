@@ -2,15 +2,14 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:system-ui,sans-serif;background:#f5f5f5;color:#222;font-size: 20px;}
 
-
-
 /* Light / Dark themes */
 .theme-light   {--bg:#fff;  --fg:#111; --msg-bg:#e1e1e1;}
 .theme-dark    {--bg:#121212;--fg:#eee; --msg-bg:#2a2a2a;}
 
 body{background:var(--bg);color:var(--fg);display:flex;flex-direction:column}
 header,footer{padding:.8rem;background:var(--msg-bg)}
-header{display:flex;justify-content:center;align-items:center;position:relative;flex-direction:column;}
+header{display:flex;justify-content:center;align-items:center;position:relative;flex-direction:column; border-bottom: 2px solid var(--bg);}
+footer{border-top: 2px solid var(--bg);}
 
 header h1 {font-size: 18px;flex:1;text-align:center;}
 header #modelSelect{margin: 10px 0 0;}
