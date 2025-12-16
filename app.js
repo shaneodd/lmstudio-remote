@@ -53,6 +53,40 @@
     }
 
 // ---------- UI helpers ------------------------------------------------
+let wakeLock = null;
+
+/**
+ * Request a screen wake lock to prevent the display from sleeping.
+ */
+async function requestWakeLock() {
+    if ('wakeLock' in navigator) {
+        try {
+            // Release any existing lock first
+            if (wakeLock) {
+                try { await wakeLock.release(); } catch (_) {}
+                wakeLock = null;
+            }
+            wakeLock = await navigator.wakeLock.request('screen');
+            // Re‑acquire on visibility change per spec
+            document.addEventListener('visibilitychange', async () => {
+                if (document.visibilityState === 'visible' && !wakeLock) {
+                    try { wakeLock = await navigator.wakeLock.request('screen'); } catch (_) {}
+                }
+            });
+        } catch (err) {
+            console.warn('Wake Lock not supported or failed:', err);
+        }
+    } else {
+        console.warn('Screen Wake Lock API not available in this browser.');
+    }
+}
+
+async function releaseWakeLock() {
+    if (wakeLock) {
+        try { await wakeLock.release(); } catch (_) {}
+        wakeLock = null;
+    }
+}
 const chatContainer   = document.getElementById('chatContainer');
 const promptInput     = document.getElementById('promptInput');
 const sendBtn         = document.getElementById('sendBtn');
@@ -223,6 +257,8 @@ attachBtn.addEventListener('change', async e => {
      * @param {string} content  User prompt text
      */
     async function sendPrompt(content) {
+    // Acquire wake lock to keep screen awake during processing
+    requestWakeLock();
         const cfg = loadConfig();
         if (!cfg.apiUrl) {
             alert("❗ Please configure the LMStudio URL first (gear icon).");
@@ -329,7 +365,9 @@ attachBtn.addEventListener('change', async e => {
             finalizeAssistantRendering(assistantText);
         // clear uploaded context UI & state
         clearPendingContext();
-        } catch (err) {
+        // Release wake lock now that processing done
+        releaseWakeLock();
+    } catch (err) {
             console.error(err);
             alert(`❗ API error – ${err.message}`);
         }
@@ -470,4 +508,6 @@ attachBtn.addEventListener('change', async e => {
             themeToggle.textContent = "🌙 Dark";
         }
     })();
+    // Release wake lock when page unloads
+    window.addEventListener('beforeunload', () => { releaseWakeLock(); });
 })();
