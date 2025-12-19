@@ -398,16 +398,14 @@ function renderMessage(msgObj) {
         if (!assistantPlaceholder) {
             const div = document.createElement('div');
             div.className = 'message assistant';
-            // set unique id for anchoring
-            const anchor = document.createElement('span');
-            anchor.id = msgId;
-            // prepend anchor at top of message
-            div.prepend(anchor);
-            // button to jump to this message's top (useful for external links)
+            // assign a unique id for this streaming message
+            const msgId = `msg-${msgCounter++}`;
+            div.id = msgId;
+            // button to scroll this message into view (top of container)
             const goTopBtn = document.createElement('button');
             goTopBtn.textContent = "🔝";
             goTopBtn.style.marginLeft='0.5rem';
-            goTopBtn.onclick = () => { anchor.scrollIntoView({behavior:'smooth', block:'start'}); };
+            goTopBtn.onclick = () => { document.getElementById(msgId).scrollIntoView({behavior:'smooth', block:'start'}); };
             // append button after content
             div.appendChild(goTopBtn);
             chatContainer.appendChild(div);
