@@ -395,29 +395,44 @@ function renderMessage(msgObj) {
     // Helpers for the streaming UI (they keep a placeholder element)
     let assistantPlaceholder = null;
     function renderStreamingAssistant(text) {
-        if (!assistantPlaceholder) {
-            const div = document.createElement('div');
-            div.className = 'message assistant';
-            // assign a unique id for this streaming message
-            const msgId = `msg-${msgCounter++}`;
-            div.id = msgId;
-            // button to scroll this message into view (top of container)
-            const goTopBtn = document.createElement('button');
-            goTopBtn.textContent = "🔝";
-            goTopBtn.style.marginLeft='0.5rem';
-            goTopBtn.onclick = () => { document.getElementById(msgId).scrollIntoView({behavior:'smooth', block:'start'}); };
-            // append button after content
-            div.appendChild(goTopBtn);
-            chatContainer.appendChild(div);
-            assistantPlaceholder = div;
+    // Update streaming assistant message while preserving the scroll‑to‑top button
+    if (!assistantPlaceholder) {
+        // Create placeholder with a content span and button
+        const div = document.createElement('div');
+        div.className = 'message assistant';
+        const msgId = `msg-${msgCounter++}`;
+        div.id = msgId;
+        // Content span for streaming text
+        const contentSpan = document.createElement('span');
+        contentSpan.className = 'stream-content';
+        contentSpan.textContent = text;
+        div.appendChild(contentSpan);
+        // Scroll‑to‑top button
+        const goTopBtn = document.createElement('button');
+        goTopBtn.textContent = "🔝";
+        goTopBtn.style.marginLeft='0.5rem';
+        goTopBtn.onclick = () => { document.getElementById(msgId).scrollIntoView({behavior:'smooth', block:'start'}); };
+        div.appendChild(goTopBtn);
+        chatContainer.appendChild(div);
+        assistantPlaceholder = div;
+    } else {
+        // Update only the text part, keep button intact
+        const contentSpan = assistantPlaceholder.querySelector('.stream-content');
+        if (contentSpan) {
+            contentSpan.textContent = text;
         }
-        assistantPlaceholder.textContent = text;
-        chatContainer.scrollTop = chatContainer.scrollHeight;
     }
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
     
     function finalizeAssistantRendering(finalText) {
-        // placeholder already holds the final text, just clear the ref
+        // Remove streaming placeholder if present
+        if (assistantPlaceholder && assistantPlaceholder.parentNode) {
+            assistantPlaceholder.parentNode.removeChild(assistantPlaceholder);
+        }
         assistantPlaceholder = null;
+        // Render final assistant message using renderMessage (adds scroll‑to‑top button)
+        renderMessage({role:'assistant', content:finalText});
     }
     
     // ----------------------------------------------------------------------
