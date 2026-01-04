@@ -25,7 +25,7 @@ A tiny, dependency‑free web client that lets you talk to an **LMStudio** insta
 ### Mobile
 1. Clone or download this repository.
 1. Open termux
-1. Run the `run_server.sh` 
+1. Run the `run_server.sh` - Note this will pull down any changes when it is run, you can switch to the unstable branch if you want what is currently being worked on
 1. Open your browser and go to `127.0.0.1:8080`
 
 
