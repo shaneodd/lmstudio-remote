@@ -52,7 +52,9 @@ A tiny, dependency‑free web client that lets you talk to an **LMStudio** insta
 ├─ index.html      # Minimal HTML layout and UI elements
 ├─ style.css       # Simple styling, includes pre‑formatted message display
 ├─ app.js          # Core logic – IndexedDB wrapper, API calls, UI helpers
+├─ run_server.sh   # Local server required for Android
 └─ manifest.json   # PWA manifest for "Add to Home Screen" support
+
 ```
 
 ---
